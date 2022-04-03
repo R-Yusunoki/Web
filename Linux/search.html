@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      #home {
+        display: block;
+        color: white;
+        background-color: green;
+        width: 120px;
+        text-decoration: none;
+        text-align: center;
+      }
+    </style>
+  </head>
+
+  <body>
+    MySQL
+    <br />
+    <a href="mysql.html" id="home">Home</a>
+    <br />
+    <br />
+    User
+    <input type="text" id="input_text" />
+    <input type="button" id="btn" value="Serach" />
+    <br />
+    <table id="display">
+      <tr>
+        <th>Host</th>
+        <th>User</th>
+        <th>Select_priv</th>
+      </tr>
+    </table>
+    <div id="display2"></div>
+
+    <script>
+      document.getElementById("btn").addEventListener(
+        "click",
+        function () {
+          let disp = document.getElementById("display");
+          let disp2 = document.getElementById("display2");
+          let xhr = new XMLHttpRequest(); //Ajax用オブジェクト生成
+
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+              if (xhr.status === 200) {
+                let res = JSON.parse(xhr.response);
+                let res_keys = Object.keys(res);
+
+                let tr = document.createElement("tr");
+                for (let i = 0; i < 3; i++) {
+                  let td = document.createElement("td");
+                  td.textContent = res[res_keys[i]];
+                  tr.appendChild(td);
+                }
+
+                disp.appendChild(tr);
+                disp2.textContent = "";
+              } else {
+                disp2.textContent = "Server Error " + xhr.status;
+              }
+            } else {
+              disp2.textContent = "Now Session...";
+            }
+          };
+
+          //　リクエスト送信
+          xhr.open("POST", "/search", true);
+          xhr.setRequestHeader(
+            "content-type",
+            "application/x-www-form-urlencoded;charset=UTF-8"
+          );
+          xhr.send("name=" + document.getElementById("input_text").value);
+        },
+        false
+      );
+    </script>
+  </body>
+</html>

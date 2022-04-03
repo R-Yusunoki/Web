@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head> </head>
+
+  <body>
+    Google News
+    <br>
+    <br>
+    <table id="display"></table>
+
+    <script>
+      window.onload = function(){
+
+          let disp = document.getElementById("display");
+          let xhr = new XMLHttpRequest(); //Ajax用オブジェクト生成
+
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+              if (xhr.status === 200) {
+                disp.textContent = "";
+
+                let res = JSON.parse(xhr.response);
+                
+                res.forEach(function(element,index){
+                  let tr = document.createElement("tr");
+                  tr.textContent = index + " " + element.title;
+                  disp.appendChild(tr);
+                });
+
+              } else {
+                disp.textContent = "Server Error " + xhr.status;
+              }
+            } else {
+              disp.textContent = "Now Session...";
+            }
+          };
+
+          //　リクエスト送信
+          xhr.open("GET", "/rss", true);
+          xhr.send(null);
+
+      };
+    </script>
+  </body>
+</html>

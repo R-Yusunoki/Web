@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="mysql.css">
+  </head>
+
+  <body>
+    MySQL
+    <br>
+    <a href="/search.html">Search</a>
+    <br>
+    <table id="display">
+      <tr><th>All User</th></tr>
+    </table>
+    <div id="display2">display2</div>
+
+    <script>
+      window.onload = function(){
+
+          let disp = document.getElementById("display");
+          let disp2 = document.getElementById("display2");
+          let xhr = new XMLHttpRequest(); //Ajax用オブジェクト生成
+
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+              if (xhr.status === 200) {
+                JSON.parse(xhr.response).forEach(function(element, index){
+                  let tr = document.createElement("tr");
+                  let td = document.createElement("td");
+
+                  td.textContent = Object.values(element);
+                  tr.appendChild(td);
+                  disp.appendChild(tr);
+                });
+
+                disp2.textContent = "";
+
+              } else {
+                disp2.textContent = "Server Error " + xhr.status;
+              }
+            } else {
+              disp2.textContent = "Now Session...";
+            }
+          };
+
+          //　リクエスト送信
+          xhr.open("GET", "/mysql", true);
+          xhr.send(null);
+
+      };
+    </script>
+  </body>
+</html>
