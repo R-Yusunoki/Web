@@ -1,0 +1,27 @@
+vue CLI + plugin Electron-builder
+
+での preload.js の設定
+
+
+(preload.jsの置き場)
+background.jsと同じsrcでよい。
+
+(background.js)
+    webPreferences: {
+
+     preload: path.join(__dirname, "preload.js"),
+
+    },
+
+(vue.config.js)
+module.exports = defineConfig({
+
+  pluginOptions: {
+    electronBuilder: {
+      preload: 'src/preload.js',
+    }
+  }
+
+})
+//これによってpreload.jsがpackされないようになる。
+//asarファイルにはbackground.jsもpreload.jsも入っている。
